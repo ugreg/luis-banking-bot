@@ -26,12 +26,14 @@
     {
       "name": "TransactionAmount",
       "children": [
-        "money"
+        "money",
+        "number"
       ]
     }
   ],
   "bing_entities": [
-    "money"
+    "money",
+    "number"
   ],
   "actions": [
     {
@@ -72,11 +74,6 @@
   "regex_features": [],
   "utterances": [
     {
-      "text": "i want to take out $100.43",
-      "intent": "Withdraw",
-      "entities": []
-    },
-    {
       "text": "put this 3k into my account",
       "intent": "Deposit",
       "entities": [
@@ -88,11 +85,6 @@
       ]
     },
     {
-      "text": "take out 5k",
-      "intent": "Withdraw",
-      "entities": []
-    },
-    {
       "text": "add 600k",
       "intent": "Deposit",
       "entities": [
@@ -102,6 +94,11 @@
           "endPos": 1
         }
       ]
+    },
+    {
+      "text": "take out 5k",
+      "intent": "Withdraw",
+      "entities": []
     },
     {
       "text": "put 456k into my checkings",
@@ -118,6 +115,11 @@
           "endPos": 4
         }
       ]
+    },
+    {
+      "text": "i want to take out $100.43",
+      "intent": "Withdraw",
+      "entities": []
     },
     {
       "text": "give me 1009k from my savings",
@@ -143,6 +145,130 @@
           "entity": "Account",
           "startPos": 2,
           "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "i want to deposit this $1,000,000 into my checkings account",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 5,
+          "endPos": 10
+        },
+        {
+          "entity": "Account",
+          "startPos": 13,
+          "endPos": 13
+        }
+      ]
+    },
+    {
+      "text": "i want to withdraw $3,543,243.43 from my savings account",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 14,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "put 4k into my savings please",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "can you please take out 6m from my checkings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 5,
+          "endPos": 5
+        },
+        {
+          "entity": "Account",
+          "startPos": 8,
+          "endPos": 8
+        }
+      ]
+    },
+    {
+      "text": "give me 4.32 from my savings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 4
+        },
+        {
+          "entity": "Account",
+          "startPos": 7,
+          "endPos": 7
+        }
+      ]
+    },
+    {
+      "text": "remove $1,000.32 from savings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 8,
+          "endPos": 8
+        }
+      ]
+    },
+    {
+      "text": "put this 55k right here into my checkings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 7,
+          "endPos": 7
+        }
+      ]
+    },
+    {
+      "text": "add 1.32 to savings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "what's my checkings balance",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
         }
       ]
     }
