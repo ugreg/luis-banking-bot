@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using Microsoft.Bot.Builder.Dialogs;
 
-namespace LUIS_Banking
+namespace LUISBankingBot
 {
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -21,7 +21,7 @@ namespace LUIS_Banking
         {
             public async Task StartAsync(IDialogContext context)
             {
-                await context.PostAsync("Welcome to your personal banking experience");
+                await context.PostAsync("Hi there! I'm your banking assistant.");
             }
         }
 
