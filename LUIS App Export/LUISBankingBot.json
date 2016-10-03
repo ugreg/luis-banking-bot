@@ -1,0 +1,150 @@
+{
+  "luis_schema_version": "1.3.0",
+  "name": "LUISBankingBot",
+  "desc": "LUIS Banking Bot",
+  "culture": "en-us",
+  "intents": [
+    {
+      "name": "Deposit"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "ShowBalance"
+    },
+    {
+      "name": "Withdraw"
+    }
+  ],
+  "entities": [
+    {
+      "name": "Account"
+    }
+  ],
+  "composites": [
+    {
+      "name": "TransactionAmount",
+      "children": [
+        "money"
+      ]
+    }
+  ],
+  "bing_entities": [
+    "money"
+  ],
+  "actions": [
+    {
+      "actionName": "Deposit",
+      "intentName": "Deposit",
+      "actionParameters": [
+        {
+          "parameterName": "TransactionAmount",
+          "entityName": "money",
+          "required": true
+        }
+      ]
+    },
+    {
+      "actionName": "ShowBalance",
+      "intentName": "ShowBalance",
+      "actionParameters": [
+        {
+          "parameterName": "Account",
+          "entityName": "Account",
+          "required": true
+        }
+      ]
+    },
+    {
+      "actionName": "Withdraw",
+      "intentName": "Withdraw",
+      "actionParameters": [
+        {
+          "parameterName": "TransactionAmount",
+          "entityName": "money",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "utterances": [
+    {
+      "text": "i want to take out $100.43",
+      "intent": "Withdraw",
+      "entities": []
+    },
+    {
+      "text": "put this 3k into my account",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "take out 5k",
+      "intent": "Withdraw",
+      "entities": []
+    },
+    {
+      "text": "add 600k",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        }
+      ]
+    },
+    {
+      "text": "put 456k into my checkings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "give me 1009k from my savings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "show my savings balance",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    }
+  ]
+}
