@@ -271,6 +271,125 @@
           "endPos": 4
         }
       ]
+    },
+    {
+      "text": "give me 200 from savings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "200 from savings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 0,
+          "endPos": 0
+        },
+        {
+          "entity": "Account",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "8732.32 to checkings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 0,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "5k to savings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 0,
+          "endPos": 0
+        },
+        {
+          "entity": "Account",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "1,234,432,543,654 to checkings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 10,
+          "endPos": 10
+        }
+      ]
+    },
+    {
+      "text": "1,234,432,543,654 from checkings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 10,
+          "endPos": 10
+        }
+      ]
+    },
+    {
+      "text": "100m from checkings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 0,
+          "endPos": 0
+        },
+        {
+          "entity": "Account",
+          "startPos": 2,
+          "endPos": 2
+        }
+      ]
+    },
+    {
+      "text": "i need my savings balance",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "what's my checkings",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
     }
   ]
 }
