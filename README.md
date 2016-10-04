@@ -11,6 +11,9 @@ As of 8/4/2016 LUIS has the followin limits on call usage.
 | Free | 10,000 transactions per month | Free |
 | Standard | 10 transactions per second | $0.75 per 1000 transactions |
 
+For fun I added emoji to the bot dialog. All emoji can be found on the [Emojipedia].
+
+[Emojipedia]: <http://emojipedia.org/>
 [Overview of the LUIS service]: <https://www.luis.ai/Help>
 
 ![alt tag](https://cdn2.scratch.mit.edu/get_image/user/13690549_90x90.png)
