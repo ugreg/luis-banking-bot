@@ -8,18 +8,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LUIS_Banking.Dialogs
+namespace LUISBankingBot.Dialogs
 {
-    public class LUIS
+    public class LuisBankingDialog
     {
         [LuisModel("6841d389-70d6-45ec-96a9-a2893d1c778e", "5d7817feda724399aaf69441f3fb18eb")]
         [Serializable]
-        public class StockDialog : LuisDialog<object>
+        public class BankingDialog : LuisDialog<object>
         {
-            [LuisIntent("LusiIntent")]
-            public async Task RepeatLastStock(IDialogContext context, LuisResult result)
+            [LuisIntent("Deposit")]
+            public async Task DepositHandler(IDialogContext context, LuisResult result)
             {
-                await context.PostAsync("Luis intent recognized");
+                await context.PostAsync("Luis intent recognized as Deposit");
                 context.Wait(MessageReceived);
             }
 
