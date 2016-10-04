@@ -1,6 +1,6 @@
 # LUISBankingBot
 
-Check out this [Overview of the LUIS service].
+Check out this [Overview of the LUIS service]. Currently the Pre-built entities are also listed on the overview page.
 
 This app useses composite entities. A composite entity involves more than one entity combined together.
 
