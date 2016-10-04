@@ -23,10 +23,25 @@ namespace LUISBankingBot.Dialogs
                 context.Wait(MessageReceived);
             }
 
+            [LuisIntent("ShowBalance")]
+            public async Task ShowBalanceHandler(IDialogContext context, LuisResult result)
+            {
+                await context.PostAsync("Luis intent recognized as ShowBalance");
+                context.Wait(MessageReceived);
+            }
+
+            [LuisIntent("Withdraw")]
+            public async Task WithdrawHandler(IDialogContext context, LuisResult result)
+            {
+                await context.PostAsync("Luis intent recognized as Withdraw");
+                context.Wait(MessageReceived);
+            }
+
             [LuisIntent("None")]
             public async Task NoneHandler(IDialogContext context, LuisResult result)
             {
-                await context.PostAsync("I'm sorry, I don't understand");
+                string worriedFace = "\U0001F61F";
+                await context.PostAsync("I'm sorry, I don't understand " + worriedFace);
                 context.Wait(MessageReceived);
             }
         }

@@ -57,9 +57,10 @@ namespace LUISBankingBot
                     case ActivityTypes.Message:
                         {
                             ConnectorClient connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-                            Activity reply = activity.CreateReply($"You said {activity.Text}");
-                            await Conversation.SendAsync(activity, () => new LuisBankingDialog.BankingDialog());
+                            Activity reply = activity.CreateReply("Working on that for you...");
+
                             await connector.Conversations.ReplyToActivityAsync(reply);
+                            await Conversation.SendAsync(activity, () => new LuisBankingDialog.BankingDialog());                            
                         }
                         break;
 
