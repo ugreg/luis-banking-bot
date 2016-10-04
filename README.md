@@ -13,6 +13,9 @@ As of 8/4/2016 LUIS has the followin limits on call usage.
 
 For fun I added emoji to the bot dialog. All emoji can be found on the [Emojipedia].
 
+[Cognitive Services Keys]
+
+[Cognitive Services Keys]: <https://www.microsoft.com/cognitive-services/en-us/sign-up>
 [Emojipedia]: <http://emojipedia.org/>
 [Overview of the LUIS service]: <https://www.luis.ai/Help>
 
