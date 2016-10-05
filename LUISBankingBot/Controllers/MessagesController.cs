@@ -42,7 +42,7 @@ namespace LUISBankingBot
         private string clientId;
         private string clientSecret;
         private string request;
-        private AccessTokenInfo token; 
+        private AccessTokenInfo token;
         private Timer accessTokenRenewer;
 
         //Access token expires every 10 minutes. Renew it every 9 minutes only.
@@ -130,7 +130,7 @@ namespace LUISBankingBot
                 return token;
             }
         }
-    }    
+    }
 
     [BotAuthentication]
     public class MessagesController : ApiController
@@ -268,42 +268,49 @@ namespace LUISBankingBot
 
                             var text = activity.Text;
 
-                                if (activity.Attachments.Any())
-                                {
-                                    var reco = DoSpeechReco(activity.Attachments.First());
+                            Attachment hawking = new Attachment("http://www.wavsource.com/snds_2016-09-25_6739387469794827/people/famous/hawking01.wav");
+                            activity.Attachments.Add(hawking );
 
-                                    if (activity.Text.ToUpper().Contains("WORD"))
-                                    {
-                                        text = "You said : " + reco + " Word Count: " + reco.Split(' ').Count();
-                                    }
-                                    else if (activity.Text.ToUpper().Contains("CHARACTER"))
-                                    {
-                                        var nospacereco = reco.ToCharArray().Where(c => c != ' ').Count();
-                                        text = "You said : " + reco + " Character Count: " + nospacereco;
-                                    }
-                                    else if (activity.Text.ToUpper().Contains("SPACE"))
-                                    {
-                                        var spacereco = reco.ToCharArray().Where(c => c == ' ').Count();
-                                        text = "You said : " + reco + " Space Count: " + spacereco;
-                                    }
-                                    else if (activity.Text.ToUpper().Contains("VOWEL"))
-                                    {
-                                        var vowelreco = reco.ToUpper().ToCharArray().Where(c => c == 'A' || c == 'E' ||
-                                                                                           c == 'O' || c == 'I' || c == 'U').Count();
-                                        text = "You said : " + reco + " Vowel Count: " + vowelreco;
-                                    }
-                                    else if (!String.IsNullOrEmpty(activity.Text))
-                                    {
-                                        var keywordreco = reco.ToUpper().Split(' ').Where(w => w == activity.Text.ToUpper()).Count();
-                                        text = "You said : " + reco + " Keyword " + activity.Text + " found " + keywordreco + " times.";
-                                    }
-                                    else
-                                    {
-                                        text = "You said : " + reco;
-                                    }
+                            if (activity.Attachments.Any())
+                            {
+                                var reco = DoSpeechReco(activity.Attachments.First());
+
+                                if (activity.Text.ToUpper().Contains("WORD"))
+                                {
+                                    text = "You said : " + reco + " Word Count: " + reco.Split(' ').Count();
                                 }
-                                Activity reply2 = activity.CreateReply(text);
-                                await connector2.Conversations.ReplyToActivityAsync(reply2);
+                                else if (activity.Text.ToUpper().Contains("CHARACTER"))
+                                {
+                                    var nospacereco = reco.ToCharArray().Where(c => c != ' ').Count();
+                                    text = "You said : " + reco + " Character Count: " + nospacereco;
+                                }
+                                else if (activity.Text.ToUpper().Contains("SPACE"))
+                                {
+                                    var spacereco = reco.ToCharArray().Where(c => c == ' ').Count();
+                                    text = "You said : " + reco + " Space Count: " + spacereco;
+                                }
+                                else if (activity.Text.ToUpper().Contains("VOWEL"))
+                                {
+                                    var vowelreco = reco.ToUpper().ToCharArray().Where(c => c == 'A' || c == 'E' ||
+                                                                                       c == 'O' || c == 'I' || c == 'U').Count();
+                                    text = "You said : " + reco + " Vowel Count: " + vowelreco;
+                                }
+                                else if (!String.IsNullOrEmpty(activity.Text))
+                                {
+                                    var keywordreco = reco.ToUpper().Split(' ').Where(w => w == activity.Text.ToUpper()).Count();
+                                    text = "You said : " + reco + " Keyword " + activity.Text + " found " + keywordreco + " times.";
+                                }
+                                else
+                                {
+                                    text = "You said : " + reco;
+                                }
+                            }
+                            else
+                            {
+
+                            }
+                            Activity reply2 = activity.CreateReply(text);
+                            await connector2.Conversations.ReplyToActivityAsync(reply2);
                         }
                         break;
 
