@@ -15,6 +15,9 @@ For fun I added emoji to the bot dialog. All emoji can be found on the [Emojiped
 
 [Cognitive Services Keys]
 
+Test out the bing speech to text and text to speech services.
+
+[bing speech to text and text to speech services]: <https://www.microsoft.com/cognitive-services/en-us/speech-api>
 [Cognitive Services Keys]: <https://www.microsoft.com/cognitive-services/en-us/sign-up>
 [Emojipedia]: <http://emojipedia.org/>
 [Overview of the LUIS service]: <https://www.luis.ai/Help>
