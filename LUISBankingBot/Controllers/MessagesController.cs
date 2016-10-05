@@ -42,7 +42,7 @@ namespace LUISBankingBot
         private string clientId;
         private string clientSecret;
         private string request;
-        private AccessTokenInfo token; // 774daf9ffd514e7dafeb592298812690
+        private AccessTokenInfo token; 
         private Timer accessTokenRenewer;
 
         //Access token expires every 10 minutes. Renew it every 9 minutes only.
@@ -143,7 +143,9 @@ namespace LUISBankingBot
             string headerValue;
             // Note: Sign up at https://microsoft.com/cognitive to get a subscription key.  
             // Use the subscription key as Client secret below.
-            Authentication auth = new Authentication("YOURUSERID", "<YOUR API KEY FROM MICROSOFT.COM/COGNITIVE");
+            string userID = "gregory.degruy@gmail.com";
+            string apiKey = "774daf9ffd514e7dafeb592298812690";
+            Authentication auth = new Authentication(userID, apiKey);
             string requestUri = "https://speech.platform.bing.com/recognize";
 
             //URI Params. Refer to the Speech API documentation for more information.
@@ -226,7 +228,6 @@ namespace LUISBankingBot
             }
         }
 
-        // https://api.projectoxford.ai/luis/v1/application?id=6841d389-70d6-45ec-96a9-a2893d1c778e&subscription-key=5d7817feda724399aaf69441f3fb18eb&q={PUT_QUERY_TEXT_HERE}
         [Serializable]
         public class EchoDialog : IDialog<object>
         {
