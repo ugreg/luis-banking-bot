@@ -130,12 +130,93 @@ namespace LUISBankingBot
                 return token;
             }
         }
-    }
+    }    
 
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        
+        // speech to text conversation
+
+        private string DoSpeechReco(Attachment attachment)
+        {
+            AccessTokenInfo token;
+            string headerValue;
+            // Note: Sign up at https://microsoft.com/cognitive to get a subscription key.  
+            // Use the subscription key as Client secret below.
+            Authentication auth = new Authentication("YOURUSERID", "<YOUR API KEY FROM MICROSOFT.COM/COGNITIVE");
+            string requestUri = "https://speech.platform.bing.com/recognize";
+
+            //URI Params. Refer to the Speech API documentation for more information.
+            requestUri += @"?scenarios=smd";                                // websearch is the other main option.
+            requestUri += @"&appid=D4D52672-91D7-4C74-8AD8-42B1D98141A5";   // You must use this ID.
+            requestUri += @"&locale=en-US";                                 // read docs, for other supported languages. 
+            requestUri += @"&device.os=wp7";
+            requestUri += @"&version=3.0";
+            requestUri += @"&format=json";
+            requestUri += @"&instanceid=565D69FF-E928-4B7E-87DA-9A750B96D9E3";
+            requestUri += @"&requestid=" + Guid.NewGuid().ToString();
+
+            string host = @"speech.platform.bing.com";
+            string contentType = @"audio/wav; codec=""audio/pcm""; samplerate=16000";
+            var wav = HttpWebRequest.Create(attachment.ContentUrl);
+            string responseString = string.Empty;
+
+            try
+            {
+                token = auth.GetAccessToken();
+                Console.WriteLine("Token: {0}\n", token.access_token);
+
+                //Create a header with the access_token property of the returned token
+                headerValue = "Bearer " + token.access_token;
+                Console.WriteLine("Request Uri: " + requestUri + Environment.NewLine);
+
+                HttpWebRequest request = null;
+                request = (HttpWebRequest)HttpWebRequest.Create(requestUri);
+                request.SendChunked = true;
+                request.Accept = @"application/json;text/xml";
+                request.Method = "POST";
+                request.ProtocolVersion = HttpVersion.Version11;
+                request.Host = host;
+                request.ContentType = contentType;
+                request.Headers["Authorization"] = headerValue;
+
+                using (Stream wavStream = wav.GetResponse().GetResponseStream())
+                {
+                    byte[] buffer = null;
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        int count = 0;
+                        do
+                        {
+                            buffer = new byte[1024];
+                            count = wavStream.Read(buffer, 0, 1024);
+                            requestStream.Write(buffer, 0, count);
+                        } while (wavStream.CanRead && count > 0);
+                        // Flush
+                        requestStream.Flush();
+                    }
+                    //Get the response from the service.
+                    Console.WriteLine("Response:");
+                    using (WebResponse response = request.GetResponse())
+                    {
+                        Console.WriteLine(((HttpWebResponse)response).StatusCode);
+                        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
+                        {
+                            responseString = sr.ReadToEnd();
+                        }
+                        Console.WriteLine(responseString);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine(ex.Message);
+            }
+            dynamic data = JObject.Parse(responseString);
+            return data.header.name;
+        }
+
         [Serializable]
         public class WelcomeDialog : IDialog<object>
         {
@@ -179,7 +260,49 @@ namespace LUISBankingBot
                             Activity reply = activity.CreateReply("Working on that for you...");
 
                             await connector.Conversations.ReplyToActivityAsync(reply);
-                            await Conversation.SendAsync(activity, () => new LuisBankingDialog.BankingDialog());                            
+                            await Conversation.SendAsync(activity, () => new LuisBankingDialog.BankingDialog());
+
+                            // text to speech
+                            ConnectorClient connector2 = new ConnectorClient(new Uri(activity.ServiceUrl));
+
+                            var text = activity.Text;
+
+                                if (activity.Attachments.Any())
+                                {
+                                    var reco = DoSpeechReco(activity.Attachments.First());
+
+                                    if (activity.Text.ToUpper().Contains("WORD"))
+                                    {
+                                        text = "You said : " + reco + " Word Count: " + reco.Split(' ').Count();
+                                    }
+                                    else if (activity.Text.ToUpper().Contains("CHARACTER"))
+                                    {
+                                        var nospacereco = reco.ToCharArray().Where(c => c != ' ').Count();
+                                        text = "You said : " + reco + " Character Count: " + nospacereco;
+                                    }
+                                    else if (activity.Text.ToUpper().Contains("SPACE"))
+                                    {
+                                        var spacereco = reco.ToCharArray().Where(c => c == ' ').Count();
+                                        text = "You said : " + reco + " Space Count: " + spacereco;
+                                    }
+                                    else if (activity.Text.ToUpper().Contains("VOWEL"))
+                                    {
+                                        var vowelreco = reco.ToUpper().ToCharArray().Where(c => c == 'A' || c == 'E' ||
+                                                                                           c == 'O' || c == 'I' || c == 'U').Count();
+                                        text = "You said : " + reco + " Vowel Count: " + vowelreco;
+                                    }
+                                    else if (!String.IsNullOrEmpty(activity.Text))
+                                    {
+                                        var keywordreco = reco.ToUpper().Split(' ').Where(w => w == activity.Text.ToUpper()).Count();
+                                        text = "You said : " + reco + " Keyword " + activity.Text + " found " + keywordreco + " times.";
+                                    }
+                                    else
+                                    {
+                                        text = "You said : " + reco;
+                                    }
+                                }
+                                Activity reply2 = activity.CreateReply(text);
+                                await connector2.Conversations.ReplyToActivityAsync(reply2);
                         }
                         break;
 
