@@ -10,8 +10,7 @@
 
     public class LuisBankingDialog
     {
-        // http call
-        // https://api.projectoxford.ai/luis/v1/application?id=6841d389-70d6-45ec-96a9-a2893d1c778e&subscription-key=5d7817feda724399aaf69441f3fb18eb&q={PUT_QUERY_TEXT_HERE}
+        // app id, subscription key
         [LuisModel("6841d389-70d6-45ec-96a9-a2893d1c778e", "5d7817feda724399aaf69441f3fb18eb")]
         [Serializable]
         public class BankingDialog : LuisDialog<object>
@@ -33,10 +32,9 @@
                 {
                     if (luisBankModel.entities.Contains(entityRecommendation.Type))
                     {
-                        var x = entityRecommendation.Entity;                        
+                        depositValues[entityRecommendation.Type] = entityRecommendation.Entity;
                     }
                 }
-                // result.Entities[0];
                 context.Wait(MessageReceived);
             }
 
