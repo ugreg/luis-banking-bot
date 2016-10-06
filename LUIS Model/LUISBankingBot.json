@@ -14,12 +14,18 @@
       "name": "ShowBalance"
     },
     {
+      "name": "Transfer"
+    },
+    {
       "name": "Withdraw"
     }
   ],
   "entities": [
     {
       "name": "Account"
+    },
+    {
+      "name": "AccountTo"
     }
   ],
   "composites": [
@@ -48,6 +54,27 @@
         {
           "parameterName": "Account",
           "entityName": "Account",
+          "required": false
+        }
+      ]
+    },
+    {
+      "actionName": "Transfer",
+      "intentName": "Transfer",
+      "actionParameters": [
+        {
+          "parameterName": "AccountFrom",
+          "entityName": "Account",
+          "required": false
+        },
+        {
+          "parameterName": "TransactionAmount",
+          "entityName": "TransactionAmount",
+          "required": false
+        },
+        {
+          "parameterName": "AccountTo",
+          "entityName": "AccountTo",
           "required": false
         }
       ]
@@ -896,6 +923,382 @@
       "text": ".............$$$$$jkdsf43534",
       "intent": "None",
       "entities": []
+    },
+    {
+      "text": "hey there, what's my savings balance?",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 7,
+          "endPos": 7
+        }
+      ]
+    },
+    {
+      "text": "i need to take out 500 from my checkings",
+      "intent": "Withdraw",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 5,
+          "endPos": 5
+        },
+        {
+          "entity": "Account",
+          "startPos": 8,
+          "endPos": 8
+        }
+      ]
+    },
+    {
+      "text": "he there, i need some help. can you show me my current savings?",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 14,
+          "endPos": 14
+        }
+      ]
+    },
+    {
+      "text": "hey there, i need my savings account balance please",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 6,
+          "endPos": 6
+        }
+      ]
+    },
+    {
+      "text": "add 500k to my checkings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "can you show me my savings balance",
+      "intent": "ShowBalance",
+      "entities": [
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "deposit 500k into my checkings",
+      "intent": "Deposit",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "i'd like to transfer 20 from my savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "TransactionAmount",
+          "startPos": 6,
+          "endPos": 6
+        },
+        {
+          "entity": "Account",
+          "startPos": 9,
+          "endPos": 9
+        }
+      ]
+    },
+    {
+      "text": "transfer $400 from my checkings to my savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 8,
+          "endPos": 8
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "transfer $400 from my savings to my checkings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 8,
+          "endPos": 8
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 2,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "transfer 1k from my checkings to my savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 7,
+          "endPos": 7
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "transfer 9001 dollars from my checkings to my savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 8,
+          "endPos": 8
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "transfer 9001k from my checkings to my savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 7,
+          "endPos": 7
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "transfer 9001k from my savings to my checkings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 7,
+          "endPos": 7
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "transfer 345678903289 from checkings to savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 5,
+          "endPos": 5
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "transfer $1 from checkings to savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 6,
+          "endPos": 6
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 2
+        },
+        {
+          "entity": "Account",
+          "startPos": 4,
+          "endPos": 4
+        }
+      ]
+    },
+    {
+      "text": "transfer 3434.32 from checkings to savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 7,
+          "endPos": 7
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 3
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "transfer 2,000 from checkings to savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 7,
+          "endPos": 7
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 3
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "transfer 21 from savings to checkings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 5,
+          "endPos": 5
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
+    },
+    {
+      "text": "transfer 21.00 from checkings to savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 7,
+          "endPos": 7
+        },
+        {
+          "entity": "Account",
+          "startPos": 5,
+          "endPos": 5
+        }
+      ]
+    },
+    {
+      "text": "transfer 2123 from checkings to savings",
+      "intent": "Transfer",
+      "entities": [
+        {
+          "entity": "AccountTo",
+          "startPos": 5,
+          "endPos": 5
+        },
+        {
+          "entity": "TransactionAmount",
+          "startPos": 1,
+          "endPos": 1
+        },
+        {
+          "entity": "Account",
+          "startPos": 3,
+          "endPos": 3
+        }
+      ]
     }
   ]
 }
