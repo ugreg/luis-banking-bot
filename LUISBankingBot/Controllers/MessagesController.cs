@@ -19,189 +19,12 @@
     using System.Runtime.Serialization.Json;
     using System.Runtime.Serialization;
     using LUISBankingBot.Services;
-
-    public class Authentication
-    {
-        public static readonly string AccessUri = "https://oxford-speech.cloudapp.net/token/issueToken";
-        private string clientId;
-        private string clientSecret;
-        private string request;
-        private AccessToken token;
-        private Timer accessTokenRenewer;
-
-        //Access token expires every 10 minutes. Renew it every 9 minutes only.
-        private const int RefreshTokenDuration = 9;
-
-        public Authentication(string clientId, string clientSecret)
-        {
-            this.clientId = clientId;
-            this.clientSecret = clientSecret;
-
-            //If clientid or client secret has special characters, encode before sending request
-            this.request = string.Format("grant_type=client_credentials&client_id={0}&client_secret={1}&scope={2}",
-                                              HttpUtility.UrlEncode(clientId),
-                                              HttpUtility.UrlEncode(clientSecret),
-                                              HttpUtility.UrlEncode("https://speech.platform.bing.com"));
-
-            this.token = HttpPost(AccessUri, this.request);
-
-            // renew the token every specfied minutes
-            accessTokenRenewer = new Timer(new TimerCallback(OnTokenExpiredCallback),
-                                           this,
-                                           TimeSpan.FromMinutes(RefreshTokenDuration),
-                                           TimeSpan.FromMilliseconds(-1));
-        }
-
-        //Return the access token
-        public AccessToken GetAccessToken()
-        {
-            return this.token;
-        }
-
-        //Renew the access token
-        private void RenewAccessToken()
-        {
-            AccessToken newAccessToken = HttpPost(AccessUri, this.request);
-            //swap the new token with old one
-            //Note: the swap is thread unsafe
-            this.token = newAccessToken;
-            Console.WriteLine(string.Format("Renewed token for user: {0} is: {1}",
-                              this.clientId,
-                              this.token.access_token));
-        }
-        //Call-back when we determine the access token has expired 
-        private void OnTokenExpiredCallback(object stateInfo)
-        {
-            try
-            {
-                RenewAccessToken();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(string.Format("Failed renewing access token. Details: {0}", ex.Message));
-            }
-            finally
-            {
-                try
-                {
-                    accessTokenRenewer.Change(TimeSpan.FromMinutes(RefreshTokenDuration), TimeSpan.FromMilliseconds(-1));
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(string.Format("Failed to reschedule timer to renew access token. Details: {0}", ex.Message));
-                }
-            }
-        }
-
-        //Helper function to get new access token
-        private AccessToken HttpPost(string accessUri, string requestDetails)
-        {
-            //Prepare OAuth request 
-            WebRequest webRequest = WebRequest.Create(accessUri);
-            webRequest.ContentType = "application/x-www-form-urlencoded";
-            webRequest.Method = "POST";
-            byte[] bytes = Encoding.ASCII.GetBytes(requestDetails);
-            webRequest.ContentLength = bytes.Length;
-            using (Stream outputStream = webRequest.GetRequestStream())
-            {
-                outputStream.Write(bytes, 0, bytes.Length);
-            }
-            using (WebResponse webResponse = webRequest.GetResponse())
-            {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AccessToken));
-                //Get deserialized object from JSON stream
-                AccessToken token = (AccessToken)serializer.ReadObject(webResponse.GetResponseStream());
-                return token;
-            }
-        }
-    }
+    using System.Net.Http.Headers;
 
     [BotAuthentication]
     public class MessagesController : ApiController
     {
-        // speech to text conversation
-
-        private string DoSpeechReco(Attachment attachment)
-        {
-            AccessToken token;
-            string headerValue;
-            // Note: Sign up at https://microsoft.com/cognitive to get a subscription key.  
-            // Use the subscription key as Client secret below.
-            string userID = "774daf9ffd514e7dafeb592298812690";
-            string apiKey = "774daf9ffd514e7dafeb592298812690";
-            Authentication auth = new Authentication(userID, apiKey);
-            string requestUri = "https://speech.platform.bing.com/recognize";
-
-            //URI Params. Refer to the Speech API documentation for more information.
-            requestUri += @"?scenarios=smd";                                // websearch is the other main option.
-            requestUri += @"&appid=D4D52672-91D7-4C74-8AD8-42B1D98141A5";   // You must use this ID.
-            requestUri += @"&locale=en-US";                                 // read docs, for other supported languages. 
-            requestUri += @"&device.os=wp7";
-            requestUri += @"&version=3.0";
-            requestUri += @"&format=json";
-            requestUri += @"&instanceid=565D69FF-E928-4B7E-87DA-9A750B96D9E3";
-            requestUri += @"&requestid=" + Guid.NewGuid().ToString();
-
-            string host = @"speech.platform.bing.com";
-            string contentType = @"audio/wav; codec=""audio/pcm""; samplerate=16000";
-            var wav = HttpWebRequest.Create(attachment.ContentUrl);
-            string responseString = string.Empty;
-
-            try
-            {
-                token = auth.GetAccessToken();
-                Console.WriteLine("Token: {0}\n", token.access_token);
-
-                //Create a header with the access_token property of the returned token
-                headerValue = "Bearer " + token.access_token;
-                Console.WriteLine("Request Uri: " + requestUri + Environment.NewLine);
-
-                HttpWebRequest request = null;
-                request = (HttpWebRequest)HttpWebRequest.Create(requestUri);
-                request.SendChunked = true;
-                request.Accept = @"application/json;text/xml";
-                request.Method = "POST";
-                request.ProtocolVersion = HttpVersion.Version11;
-                request.Host = host;
-                request.ContentType = contentType;
-                request.Headers["Authorization"] = headerValue;
-
-                using (Stream wavStream = wav.GetResponse().GetResponseStream())
-                {
-                    byte[] buffer = null;
-                    using (Stream requestStream = request.GetRequestStream())
-                    {
-                        int count = 0;
-                        do
-                        {
-                            buffer = new byte[1024];
-                            count = wavStream.Read(buffer, 0, 1024);
-                            requestStream.Write(buffer, 0, count);
-                        } while (wavStream.CanRead && count > 0);
-                        // Flush
-                        requestStream.Flush();
-                    }
-                    //Get the response from the service.
-                    Console.WriteLine("Response:");
-                    using (WebResponse response = request.GetResponse())
-                    {
-                        Console.WriteLine(((HttpWebResponse)response).StatusCode);
-                        using (StreamReader sr = new StreamReader(response.GetResponseStream()))
-                        {
-                            responseString = sr.ReadToEnd();
-                        }
-                        Console.WriteLine(responseString);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine(ex.Message);
-            }
-            dynamic data = JObject.Parse(responseString);
-            return data.header.name;
-        }
+        private readonly MicrosoftSpeechService speechService = new MicrosoftSpeechService();
 
         [Serializable]
         public class WelcomeDialog : IDialog<object>
@@ -236,7 +59,6 @@
         {
             if (activity != null)
             {
-                // one of these will have an interface and process it
                 switch (activity.GetActivityType())
                 {
                     case ActivityTypes.Message:
@@ -247,69 +69,137 @@
                             await connector.Conversations.ReplyToActivityAsync(reply);
                             await Conversation.SendAsync(activity, () => new LuisBankingDialog.BankingDialog());
 
-                            // text to speech
-                            ConnectorClient connector2 = new ConnectorClient(new Uri(activity.ServiceUrl));
-
-                            var text = activity.Text;
-
-                            Attachment hawking = new Attachment("http://www.wavsource.com/snds_2016-09-25_6739387469794827/people/famous/hawking01.wav");
-                            activity.Attachments.Add(hawking);
-
-                            if (activity.Attachments.Any())
+                            // speech to text
+                            string message = "";
+                            try
                             {
                                 var audioAttachment = activity.Attachments?.FirstOrDefault(a => a.ContentType.Equals("audio/wav") || a.ContentType.Equals("application/octet-stream"));
-                                var reco = DoSpeechReco(audioAttachment);
-
-                                if (activity.Text.ToUpper().Contains("WORD"))
+                                if (audioAttachment != null)
                                 {
-                                    text = "You said : " + reco + " Word Count: " + reco.Split(' ').Count();
-                                }
-                                else if (activity.Text.ToUpper().Contains("CHARACTER"))
-                                {
-                                    var nospacereco = reco.ToCharArray().Where(c => c != ' ').Count();
-                                    text = "You said : " + reco + " Character Count: " + nospacereco;
-                                }
-                                else if (activity.Text.ToUpper().Contains("SPACE"))
-                                {
-                                    var spacereco = reco.ToCharArray().Where(c => c == ' ').Count();
-                                    text = "You said : " + reco + " Space Count: " + spacereco;
-                                }
-                                else if (activity.Text.ToUpper().Contains("VOWEL"))
-                                {
-                                    var vowelreco = reco.ToUpper().ToCharArray().Where(c => c == 'A' || c == 'E' ||
-                                                                                       c == 'O' || c == 'I' || c == 'U').Count();
-                                    text = "You said : " + reco + " Vowel Count: " + vowelreco;
-                                }
-                                else if (!String.IsNullOrEmpty(activity.Text))
-                                {
-                                    var keywordreco = reco.ToUpper().Split(' ').Where(w => w == activity.Text.ToUpper()).Count();
-                                    text = "You said : " + reco + " Keyword " + activity.Text + " found " + keywordreco + " times.";
+                                    var stream = await GetImageStream(connector, audioAttachment);
+                                    var text = await this.speechService.GetTextFromAudioAsync(stream);
+                                    message = ProcessText(activity.Text, text);
                                 }
                                 else
                                 {
-                                    text = "You said : " + reco;
+                                    message = "I only support wav audio files at the moment. Try to upload anohter file with this format.";
                                 }
                             }
-                            Activity reply2 = activity.CreateReply(text);
-                            await connector2.Conversations.ReplyToActivityAsync(reply2);
+                            catch (Exception e)
+                            {
+                                message = "Oops! Something went wrong. Try again later.";
+
+                                Trace.TraceError(e.ToString());
+                            }
+
+                            reply = activity.CreateReply(message);
+                            await connector.Conversations.ReplyToActivityAsync(reply);
                         }
                         break;
 
                     case ActivityTypes.ConversationUpdate:
+                        {
+                            break;
+                        }
                     case ActivityTypes.ContactRelationUpdate:
+                        {
+                            break;
+                        }
                     case ActivityTypes.Typing:
+                        {
+                            break;
+                        }
                     case ActivityTypes.DeleteUserData:
+                        {
+                            break;
+                        }
                     default:
                         Trace.TraceError($"Unknown activity type ignored: {activity.GetActivityType()}");
                         break;
                 }
             }
-            else
-            {
 
-            }
             var response = Request.CreateResponse(HttpStatusCode.OK);
             return response;
+        }
+
+        // audio file text to speech helper
+        private static string ProcessText(string input, string text)
+        {
+            string message = "You said : " + text + ".";
+
+            input = input?.Trim();
+
+            if (!string.IsNullOrEmpty(input))
+            {
+                var normalizedInput = input.ToUpper();
+
+                if (normalizedInput.Equals("WORD"))
+                {
+                    var wordCount = text.Split(' ').Count(x => !string.IsNullOrEmpty(x));
+                    message += " Word Count: " + wordCount;
+                }
+                else if (normalizedInput.Equals("CHARACTER"))
+                {
+                    var characterCount = text.Count(c => c != ' ');
+                    message += " Character Count: " + characterCount;
+                }
+                else if (normalizedInput.Equals("SPACE"))
+                {
+                    var spaceCount = text.Count(c => c == ' ');
+                    message += " Space Count: " + spaceCount;
+                }
+                else if (normalizedInput.Equals("VOWEL"))
+                {
+                    var vowelCount = text.ToUpper().Count("AEIOU".Contains);
+                    message += " Vowel Count: " + vowelCount;
+                }
+                else
+                {
+                    var keywordCount = text.ToUpper().Split(' ').Count(w => w == normalizedInput);
+                    message += " Keyword " + input + " found " + keywordCount + " times.";
+                }
+            }
+
+            return message;
+        }
+
+        private static async Task<Stream> GetImageStream(ConnectorClient connector, Attachment imageAttachment)
+        {
+            using (var httpClient = new HttpClient())
+            {
+                // The Skype attachment URLs are secured by JwtToken,
+                // you should set the JwtToken of your bot as the authorization header for the GET request your bot initiates to fetch the image.
+                // https://github.com/Microsoft/BotBuilder/issues/662
+                var uri = new Uri(imageAttachment.ContentUrl);
+                if (uri.Host.EndsWith("skype.com") && uri.Scheme == "https")
+                {
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetTokenAsync(connector));
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/octet-stream"));
+                }
+                else
+                {
+                    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(imageAttachment.ContentType));
+                }
+
+                return await httpClient.GetStreamAsync(uri);
+            }
+        }
+
+        /// <summary>
+        /// Gets the JwT token of the bot. 
+        /// </summary>
+        /// <param name="connector"></param>
+        /// <returns>JwT token of the bot</returns>
+        private static async Task<string> GetTokenAsync(ConnectorClient connector)
+        {
+            var credentials = connector.Credentials as MicrosoftAppCredentials;
+            if (credentials != null)
+            {
+                return await credentials.GetTokenAsync();
+            }
+
+            return null;
         }
     }
 }

@@ -8,6 +8,7 @@
     using System.Net.Http;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Web.Configuration;
 
     public class AuthenticationService
     {
@@ -28,7 +29,6 @@
         }
 
         public static AuthenticationService Instance { get; } = new AuthenticationService();
-
 
         public AccessToken GetAccessToken()
         {

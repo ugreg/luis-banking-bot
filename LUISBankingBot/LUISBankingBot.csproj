@@ -131,6 +131,8 @@
     <Compile Include="Models\AccessToken.cs" />
     <Compile Include="Models\Customer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\MicrosoftSpeechService.cs" />
+    <Compile Include="Services\AuthenticationService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

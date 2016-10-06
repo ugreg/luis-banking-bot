@@ -11,7 +11,7 @@
         [DataMember]
         public string token_type { get; set; }
         [DataMember]
-        public string expires_in { get; set; }
+        public int expires_in { get; set; }
         [DataMember]
         public string scope { get; set; }
 
