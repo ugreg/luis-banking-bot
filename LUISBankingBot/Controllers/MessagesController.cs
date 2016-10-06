@@ -1,40 +1,24 @@
-﻿using System;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Description;
-using Microsoft.Bot.Connector;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Diagnostics;
-using Microsoft.Bot.Builder.Dialogs;
-using LUISBankingBot.Dialogs;
-using System.Threading;
-using System.Web;
-using System.Text;
-using System.IO;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
-using System.ComponentModel;
-
-namespace LUISBankingBot
+﻿namespace LUISBankingBot
 {
-    [DataContract]
-    public class AccessTokenInfo
-    {
-        [DataMember]
-        public string access_token { get; set; }
-        [DataMember]
-        public string token_type { get; set; }
-        [DataMember]
-        public string expires_in { get; set; }
-        [DataMember]
-        public string scope { get; set; }
-    }
+    using System;
+    using System.Linq;
+    using System.Net;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using System.Web.Http;
+    using Microsoft.Bot.Connector;
+    using Newtonsoft.Json.Linq;
+    using System.Diagnostics;
+    using Microsoft.Bot.Builder.Dialogs;
+    using LUISBankingBot.Dialogs;
+    using LUISBankingBot.Models;
+    using System.Threading;
+    using System.Web;
+    using System.Text;
+    using System.IO;
+    using System.Runtime.Serialization.Json;
+    using System.Runtime.Serialization;
+    using LUISBankingBot.Services;
 
     public class Authentication
     {
@@ -42,7 +26,7 @@ namespace LUISBankingBot
         private string clientId;
         private string clientSecret;
         private string request;
-        private AccessTokenInfo token;
+        private AccessToken token;
         private Timer accessTokenRenewer;
 
         //Access token expires every 10 minutes. Renew it every 9 minutes only.
@@ -69,7 +53,7 @@ namespace LUISBankingBot
         }
 
         //Return the access token
-        public AccessTokenInfo GetAccessToken()
+        public AccessToken GetAccessToken()
         {
             return this.token;
         }
@@ -77,7 +61,7 @@ namespace LUISBankingBot
         //Renew the access token
         private void RenewAccessToken()
         {
-            AccessTokenInfo newAccessToken = HttpPost(AccessUri, this.request);
+            AccessToken newAccessToken = HttpPost(AccessUri, this.request);
             //swap the new token with old one
             //Note: the swap is thread unsafe
             this.token = newAccessToken;
@@ -110,7 +94,7 @@ namespace LUISBankingBot
         }
 
         //Helper function to get new access token
-        private AccessTokenInfo HttpPost(string accessUri, string requestDetails)
+        private AccessToken HttpPost(string accessUri, string requestDetails)
         {
             //Prepare OAuth request 
             WebRequest webRequest = WebRequest.Create(accessUri);
@@ -124,9 +108,9 @@ namespace LUISBankingBot
             }
             using (WebResponse webResponse = webRequest.GetResponse())
             {
-                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AccessTokenInfo));
+                DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(AccessToken));
                 //Get deserialized object from JSON stream
-                AccessTokenInfo token = (AccessTokenInfo)serializer.ReadObject(webResponse.GetResponseStream());
+                AccessToken token = (AccessToken)serializer.ReadObject(webResponse.GetResponseStream());
                 return token;
             }
         }
@@ -139,11 +123,11 @@ namespace LUISBankingBot
 
         private string DoSpeechReco(Attachment attachment)
         {
-            AccessTokenInfo token;
+            AccessToken token;
             string headerValue;
             // Note: Sign up at https://microsoft.com/cognitive to get a subscription key.  
             // Use the subscription key as Client secret below.
-            string userID = "gregory.degruy@gmail.com";
+            string userID = "774daf9ffd514e7dafeb592298812690";
             string apiKey = "774daf9ffd514e7dafeb592298812690";
             Authentication auth = new Authentication(userID, apiKey);
             string requestUri = "https://speech.platform.bing.com/recognize";
@@ -269,11 +253,12 @@ namespace LUISBankingBot
                             var text = activity.Text;
 
                             Attachment hawking = new Attachment("http://www.wavsource.com/snds_2016-09-25_6739387469794827/people/famous/hawking01.wav");
-                            activity.Attachments.Add(hawking );
+                            activity.Attachments.Add(hawking);
 
                             if (activity.Attachments.Any())
                             {
-                                var reco = DoSpeechReco(activity.Attachments.First());
+                                var audioAttachment = activity.Attachments?.FirstOrDefault(a => a.ContentType.Equals("audio/wav") || a.ContentType.Equals("application/octet-stream"));
+                                var reco = DoSpeechReco(audioAttachment);
 
                                 if (activity.Text.ToUpper().Contains("WORD"))
                                 {
@@ -304,10 +289,6 @@ namespace LUISBankingBot
                                 {
                                     text = "You said : " + reco;
                                 }
-                            }
-                            else
-                            {
-
                             }
                             Activity reply2 = activity.CreateReply(text);
                             await connector2.Conversations.ReplyToActivityAsync(reply2);
