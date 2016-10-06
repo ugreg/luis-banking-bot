@@ -1,15 +1,11 @@
-﻿using Microsoft.Bot.Builder.Dialogs;
-using Microsoft.Bot.Builder.Luis;
-using Microsoft.Bot.Builder.Luis.Models;
-using Microsoft.Bot.Connector;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LUISBankingBot.Dialogs
+﻿namespace LUISBankingBot.Dialogs
 {
+    using Microsoft.Bot.Builder.Dialogs;
+    using Microsoft.Bot.Builder.Luis;
+    using Microsoft.Bot.Builder.Luis.Models;
+    using System;
+    using System.Threading.Tasks;
+
     public class LuisBankingDialog
     {
         // if want to test using http call
