@@ -1,4 +1,4 @@
-﻿namespace LUIS_Banking.Models
+﻿namespace LUISBankingBot.Models
 {
     public class Customer
     {
