@@ -10,31 +10,21 @@
 
     public class LuisBankingDialog
     {
-        // app id, subscription key
         [LuisModel("6841d389-70d6-45ec-96a9-a2893d1c778e", "5d7817feda724399aaf69441f3fb18eb")]
         [Serializable]
         public class BankingDialog : LuisDialog<object>
         {
             private LUISBankModel luisBankModel;
+            private static Customer customer;
 
             [LuisIntent("Deposit")]
             public async Task DepositHandler(IDialogContext context, LuisResult result)
             {
-                var depositValues = new Dictionary<string, dynamic>
-                {
-                    { "Account", "" },
-                    { "TransactionAmount", 17.48 },
-                };
+                var utteranceEntities = generateUtteranceEntities(result);
                 luisBankModel = new LUISBankModel();
 
-                await context.PostAsync("Luis intent recognized as Deposit");                
-                foreach (var entityRecommendation in result.Entities)
-                {
-                    if (luisBankModel.entities.Contains(entityRecommendation.Type))
-                    {
-                        depositValues[entityRecommendation.Type] = entityRecommendation.Entity;
-                    }
-                }
+                await context.PostAsync("Got it!");
+                await context.PostAsync($"I'll go ahead and deposit ${utteranceEntities["TransactionAmount"]} into your {utteranceEntities["Account"]}.");
                 context.Wait(MessageReceived);
             }
 
@@ -45,10 +35,21 @@
                 context.Wait(MessageReceived);
             }
 
+            [LuisIntent("Transfer")]
+            public async Task TransferHandler(IDialogContext context, LuisResult result)
+            {
+                await context.PostAsync("Luis intent recognized as Transfer");
+                context.Wait(MessageReceived);
+            }
+
             [LuisIntent("Withdraw")]
             public async Task WithdrawHandler(IDialogContext context, LuisResult result)
             {
-                await context.PostAsync("Luis intent recognized as Withdraw");
+                var utteranceEntities = generateUtteranceEntities(result);
+                luisBankModel = new LUISBankModel();
+
+                await context.PostAsync("Sure thing!");
+                await context.PostAsync($"I'll go ahead and withdraw ${utteranceEntities["TransactionAmount"]} from your {utteranceEntities["Account"]}.");
                 context.Wait(MessageReceived);
             }
 
@@ -58,6 +59,26 @@
                 string worriedFace = "\U0001F61F";
                 await context.PostAsync("I'm sorry, I don't understand " + worriedFace);
                 context.Wait(MessageReceived);
+            }
+
+            private Dictionary<string, dynamic> generateUtteranceEntities(LuisResult result)
+            {
+                var utteranceEntities = new Dictionary<string, dynamic>
+                {
+                    { "Account", "" },
+                    { "AccountTo", "" },
+                    { "TransactionAmount", 0f },
+                };
+
+                foreach (var entityRecommendation in result.Entities)
+                {
+                    if (luisBankModel.entities.Contains(entityRecommendation.Type))
+                    {
+                        utteranceEntities[entityRecommendation.Type] = entityRecommendation.Entity;
+                    }
+                }
+
+                return utteranceEntities;
             }
         }
     }

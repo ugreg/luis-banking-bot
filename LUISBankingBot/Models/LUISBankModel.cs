@@ -11,8 +11,7 @@
         public LUISBankModel()
         {
             intents = new List<string>() { "Deposit", "None", "ShowBalance", "Transfer", "Withdraw" };
-            entities = new List<string>() { "Account", "AccountTo" };
-            composites = new List<string>() { "TransactionAmount" };
+            entities = new List<string>() { "Account", "AccountTo", "TransactionAmount" };
         }
 
     }
