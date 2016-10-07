@@ -41,14 +41,14 @@
             [LuisIntent("ShowBalance")]
             public async Task ShowBalanceHandler(IDialogContext context, LuisResult result)
             {
-                await context.PostAsync("Luis intent recognized as ShowBalance");
+                await context.PostAsync("Looks like you currentlly have $x in your x account.");
                 context.Wait(MessageReceived);
             }
 
             [LuisIntent("Transfer")]
             public async Task TransferHandler(IDialogContext context, LuisResult result)
             {
-                await context.PostAsync("Looks like you currentlly have $x in your x account.");
+                await context.PostAsync("Luis intent recognized as Transfer");
                 context.Wait(MessageReceived);
             }
 
