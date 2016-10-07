@@ -48,18 +48,30 @@
             [LuisIntent("Transfer")]
             public async Task TransferHandler(IDialogContext context, LuisResult result)
             {
-                await context.PostAsync("Luis intent recognized as Transfer");
+                await context.PostAsync("Looks like you currentlly have $x in your x account.");
                 context.Wait(MessageReceived);
             }
 
             [LuisIntent("Withdraw")]
             public async Task WithdrawHandler(IDialogContext context, LuisResult result)
             {
-                // var utteranceEntities = generateUtteranceEntities(result);
+                var utteranceEntities = new Dictionary<string, dynamic>
+                {
+                    { "Account", "" },
+                    { "TransactionAmount", 0f },
+                };
                 luisBankModel = new LUISBankModel();
 
+                foreach (var entityRecommendation in result.Entities)
+                {
+                    if (luisBankModel.entities.Contains(entityRecommendation.Type))
+                    {
+                        utteranceEntities[entityRecommendation.Type] = entityRecommendation.Entity;
+                    }
+                }
+                
                 await context.PostAsync("Sure thing!");
-                // await context.PostAsync($"I'll go ahead and withdraw ${utteranceEntities["TransactionAmount"]} from your {utteranceEntities["Account"]}.");
+                await context.PostAsync($"I'll go ahead and withdraw ${utteranceEntities["TransactionAmount"]} from your {utteranceEntities["Account"]}.");
                 context.Wait(MessageReceived);
             }
 
@@ -67,7 +79,8 @@
             public async Task NoneHandler(IDialogContext context, LuisResult result)
             {
                 string worriedFace = "\U0001F61F";
-                await context.PostAsync("I'm sorry, I don't understand " + worriedFace);
+                await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
+                await context.PostAsync("Here are some things I can say.");
                 context.Wait(MessageReceived);
             }
         }
