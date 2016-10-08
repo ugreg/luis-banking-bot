@@ -1,6 +1,7 @@
 ﻿namespace LUISBankingBot.Dialogs
 {
     using LUISBankingBot.Models;
+    using LUISBankingBot.Views;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Builder.Luis;
     using Microsoft.Bot.Builder.Luis.Models;
@@ -14,6 +15,7 @@
         [Serializable]
         public class BankingDialog : LuisDialog<object>
         {
+            private Customer customer;  
             private LUISBankModel luisBankModel;
 
             [LuisIntent("Deposit")]
@@ -22,7 +24,7 @@
                 var utteranceEntities = new Dictionary<string, dynamic>
                 {
                     { "Account", "" },
-                    { "TransactionAmount", 0f },
+                    { "TransactionAmount", 0d },
                 };
                 luisBankModel = new LUISBankModel();
                                 
@@ -58,7 +60,7 @@
                 var utteranceEntities = new Dictionary<string, dynamic>
                 {
                     { "Account", "" },
-                    { "TransactionAmount", 0f },
+                    { "TransactionAmount", 0d },
                 };
                 luisBankModel = new LUISBankModel();
 
@@ -79,9 +81,15 @@
             public async Task NoneHandler(IDialogContext context, LuisResult result)
             {
                 string worriedFace = "\U0001F61F";
+
                 await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
                 await context.PostAsync("Here are some things I can say.");
-                context.Wait(MessageReceived);
+
+                var message = context.MakeMessage();
+                CardView cardView = new CardView();
+                var x = cardView.ReceiptCard();
+
+                await context.PostAsync(message);
             }
         }
     }

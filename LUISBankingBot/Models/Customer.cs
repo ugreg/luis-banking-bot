@@ -2,12 +2,11 @@
 {
     public class Customer
     {
-        public double Balance
+        public double balance { get; }
+
+        public Customer(double balance)
         {
-            get
-            {
-                return Balance;
-            }
+            this.balance = balance;
         }
     }
 }
