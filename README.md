@@ -1,12 +1,12 @@
 # LUISBankingBot
 
-This bot uses LUIS (Language understanding intelligence service). Check out this [Overview of the LUIS service]. Currently the Pre-built entities are also listed on the overview page. You might also need some [Cognitive Services Keys]. This app useses some prebuilt composite entities (like number and money) for ease of implementatoin, a composite entity is just a bunch o' entities mashed together.
+This bot uses LUIS (Language understanding intelligence service). Check out this [Overview of the LUIS service]. Currently the Pre-built entities are also listed on the overview page. You might also need some [Cognitive Services Keys]. This app uses some prebuilt composite entities (like number and money) for ease of implementatoin, a composite entity is just a bunch o' entities mashed together.
 
 [Publish your Bot Application to Microsoft Azure] and show it to the world.
 
-You can also [test your bot in a webapp].
+You can also [test your bot in a webapp]. The app is contained within an iframe of a webpage. In the iframe, just include your app secret generated after properly configuring your bot endpoint in the tutorial when you [Publish your Bot Application to Microsoft Azure]. This webapp is just an instance of your bot, like how you can instances in Facebook Messenger, Slack, GroupMe etc.
 
-As of 8/4/2016 LUIS has the followin limits on call usage.
+As of 8/4/2016 LUIS has the following limits on call usage.
 | Plan | Description | Price|
 |---	|---	|---	|
 | Free | 10,000 transactions per month | Free |
