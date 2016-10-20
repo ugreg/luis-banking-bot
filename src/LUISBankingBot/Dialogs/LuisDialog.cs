@@ -83,19 +83,8 @@
             {
                 string worriedFace = "\U0001F61F";
 
-                await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
-                await context.PostAsync("Here are some things I can say.");
-
-                //var message = context.MakeMessage();
-                //CardView cardView = new CardView();
-                //var x = cardView.ReceiptCard();
-
-                //await context.PostAsync(message);
-
-
-                // context.Wait(this.MessageReceivedAsync);
+                await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');                
             }
-
         }
     }
 }
