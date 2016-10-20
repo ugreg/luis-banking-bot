@@ -1,10 +1,11 @@
 ﻿namespace LUISBankingBot.Dialogs
 {
     using LUISBankingBot.Models;
-    using LUISBankingBot.Views;
+    //using LUISBankingBot.Views;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Builder.Luis;
     using Microsoft.Bot.Builder.Luis.Models;
+    using Microsoft.Bot.Connector;
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
@@ -85,12 +86,16 @@
                 await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
                 await context.PostAsync("Here are some things I can say.");
 
-                var message = context.MakeMessage();
-                CardView cardView = new CardView();
-                var x = cardView.ReceiptCard();
+                //var message = context.MakeMessage();
+                //CardView cardView = new CardView();
+                //var x = cardView.ReceiptCard();
 
-                await context.PostAsync(message);
+                //await context.PostAsync(message);
+
+
+                // context.Wait(this.MessageReceivedAsync);
             }
+
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿namespace LUISBankingBot.Views
 {
-    using System;
     using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Connector;
 
     public class CardView

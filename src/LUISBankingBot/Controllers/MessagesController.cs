@@ -7,17 +7,11 @@
     using System.Threading.Tasks;
     using System.Web.Http;
     using Microsoft.Bot.Connector;
-    using Newtonsoft.Json.Linq;
     using System.Diagnostics;
     using Microsoft.Bot.Builder.Dialogs;
     using LUISBankingBot.Dialogs;
-    using LUISBankingBot.Models;
-    using System.Threading;
-    using System.Web;
-    using System.Text;
+    using LUISBankingBot.Models;   
     using System.IO;
-    using System.Runtime.Serialization.Json;
-    using System.Runtime.Serialization;
     using LUISBankingBot.Services;
     using System.Net.Http.Headers;
 
