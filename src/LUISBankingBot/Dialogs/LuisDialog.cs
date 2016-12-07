@@ -1,7 +1,7 @@
 ﻿namespace LUISBankingBot.Dialogs
 {
     using LUISBankingBot.Models;
-    //using LUISBankingBot.Views;
+    using LUISBankingBot.Views;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Builder.Luis;
     using Microsoft.Bot.Builder.Luis.Models;
@@ -88,6 +88,18 @@
 
                 await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
                 await context.PostAsync("Here are some things I know how to talk about!" + smilingFace);
+
+                // new CardView().ReceiptCard;
+                HeroCard plCard = new HeroCard()
+                {
+                    Title = "I'm a hero card",
+                    Subtitle = "Pig Latin Wikipedia Page"
+                };
+
+                Attachment plAttachment = plCard.ToAttachment();
+                context.Attachments.Add(plAttachment);
+
+                var reply = await connector.Conversations.SendToConversationAsync(replyToConversation);
             }
         }
     }
