@@ -49,13 +49,12 @@
 
         private static AccessToken GetNewToken()
         {
-
             using (var client = new HttpClient())
             {
                 var values = new Dictionary<string, string>
                 {
                     { "grant_type", "client_credentials" },
-                    { "client_id", ApiKey },
+                    { "client_id", ApiKey }, // pulled from config file, seperate from logic
                     { "client_secret", ApiKey },
                     { "scope", "https://speech.platform.bing.com" }
                 };
@@ -65,6 +64,7 @@
                 var responseString = response.Content.ReadAsStringAsync().Result;
                 return JsonConvert.DeserializeObject<AccessToken>(responseString);
             }
+            // information unknown beyound this point
         }
 
         

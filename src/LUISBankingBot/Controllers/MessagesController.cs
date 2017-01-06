@@ -27,23 +27,7 @@
             {
                 await context.PostAsync("Hi there! I'm your banking assistant.");
             }
-        }
-
-        [Serializable]
-        public class EchoDialog : IDialog<object>
-        {
-            public async Task StartAsync(IDialogContext context)
-            {
-                context.Wait(MessageReceivedAsync);
-            }
-
-            public async Task MessageReceivedAsync(IDialogContext context, IAwaitable<IMessageActivity> argument)
-            {
-                var message = await argument;
-                await context.PostAsync("Completed account lookup for " + message.Text + ". Please enter another TE.");
-                context.Wait(MessageReceivedAsync);
-            }
-        }
+        }      
 
         /// <summary>
         /// POST: api/Messages
@@ -90,6 +74,7 @@
                             await connector.Conversations.ReplyToActivityAsync(reply);
                         }
                         break;
+
 
                     case ActivityTypes.ConversationUpdate:
                         {

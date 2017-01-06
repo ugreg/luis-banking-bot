@@ -1,7 +1,7 @@
 ﻿namespace LUISBankingBot.Dialogs
 {
     using LUISBankingBot.Models;
-    //using LUISBankingBot.Views;
+    using LUISBankingBot.Views;
     using Microsoft.Bot.Builder.Dialogs;
     using Microsoft.Bot.Builder.Luis;
     using Microsoft.Bot.Builder.Luis.Models;
@@ -38,6 +38,8 @@
                 }
                 await context.PostAsync("Got it!");
                 await context.PostAsync($"I'll go ahead and deposit ${utteranceEntities["TransactionAmount"]} into your {utteranceEntities["Account"]}.");
+                // confirmation to select the propse intent no, yes
+                // ..
                 context.Wait(MessageReceived);
             }
 
@@ -82,8 +84,23 @@
             public async Task NoneHandler(IDialogContext context, LuisResult result)
             {
                 string worriedFace = "\U0001F61F";
+                string smilingFace = "\U0001F642";
 
-                await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');                
+                await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
+                await context.PostAsync("Here are some things I know how to talk about! " + smilingFace);
+
+                var message = context.MakeMessage();                
+                message.Attachments = new List<Attachment>();
+                message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+                CardView cardView = new CardView();
+                List<Attachment> helpCards = cardView.MakeHelpCards();
+                foreach (var card in helpCards)
+                {
+                    message.Attachments.Add(card);
+                }
+
+                await context.PostAsync(message);
             }
         }
     }
