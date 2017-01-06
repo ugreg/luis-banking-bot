@@ -89,31 +89,16 @@
                 await context.PostAsync("I'm sorry, I didn't get that " + worriedFace + '.');
                 await context.PostAsync("Here are some things I know how to talk about! " + smilingFace);
 
-                var message = context.MakeMessage();
-
-                var receiptCard = new ReceiptCard
-                {
-                    Title = "John Doe",
-                    Facts = new List<Fact> { new Fact("Order Number", "1234"), new Fact("Payment Method", "VISA 5555-****") },
-                    Items = new List<ReceiptItem>
-            {
-                new ReceiptItem("Data Transfer", price: "$ 38.45", quantity: "368", image: new CardImage(url: "https://github.com/amido/azure-vector-icons/raw/master/renders/traffic-manager.png")),
-                new ReceiptItem("App Service", price: "$ 45.00", quantity: "720", image: new CardImage(url: "https://github.com/amido/azure-vector-icons/raw/master/renders/cloud-service.png")),
-            },
-                    Tax = "$ 7.50",
-                    Total = "$ 90.95",
-                    Buttons = new List<CardAction>
-            {
-                new CardAction(
-                    ActionTypes.OpenUrl,
-                    "More information",
-                    "https://github.com/amido/azure-vector-icons/raw/master/renders/traffic-manager.png",
-                    "https://azure.microsoft.com/en-us/pricing/")
-            }
-                };
-
+                var message = context.MakeMessage();                
                 message.Attachments = new List<Attachment>();
-                message.Attachments.Add(receiptCard.ToAttachment());
+                message.AttachmentLayout = AttachmentLayoutTypes.Carousel;
+
+                CardView cardView = new CardView();
+                List<Attachment> helpCards = cardView.MakeHelpCards();
+                foreach (var card in helpCards)
+                {
+                    message.Attachments.Add(card);
+                }
 
                 await context.PostAsync(message);
             }
