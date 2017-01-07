@@ -15,7 +15,7 @@
             {
                 Title = "Making withdrawals",
                 Subtitle = "You can say things like:",
-                Text = @"• ""Hi banking bot, please withdraw 100 from my savings"".",
+                Text = @"• ""Hi banking bot, please withdraw 100 from of my savings"".",
                 Images = new List<CardImage> { new CardImage("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHBhdGggZD0iTTI3LjkzOCA0Ljc1TDMuMTU1IDlIMTVsMTEuMzEzLTEuOTM4TDI2LjY1NSA5aDIuMDMybC0uNzUtNC4yNXpNMiAxMHYxNmgyOFYxMEgyem00LjkzOCAyaDE4LjEyNWMtLjAzNC4xNjMtLjA2My4zMjctLjA2My41IDAgMS4zOCAxLjEyIDIuNSAyLjUgMi41LjE3MyAwIC4zMzctLjAzLjUtLjA2M3Y2LjEyNmMtLjE2My0uMDM0LS4zMjctLjA2My0uNS0uMDYzLTEuMzggMC0yLjUgMS4xMi0yLjUgMi41IDAgLjE3My4wMy4zMzcuMDYzLjVINi45MzhjLjAzMy0uMTYzLjA2Mi0uMzI3LjA2Mi0uNUM3IDIyLjEyIDUuODggMjEgNC41IDIxYy0uMTczIDAtLjMzNy4wMy0uNS4wNjN2LTYuMTI1Yy4xNjMuMDMzLjMyNy4wNjIuNS4wNjJDNS44OCAxNSA3IDEzLjg4IDcgMTIuNWMwLS4xNzMtLjAzLS4zMzctLjA2My0uNXpNMTYgMTNjLTIuNzUgMC01IDIuMjUtNSA1czIuMjUgNSA1IDUgNS0yLjI1IDUtNS0yLjI1LTUtNS01em0wIDJjMS42NyAwIDMgMS4zMyAzIDNzLTEuMzMgMy0zIDMtMy0xLjMzLTMtMyAxLjMzLTMgMy0zeiIvPjwvc3ZnPg==") },
                 Buttons = new List<CardAction> { new CardAction(ActionTypes.OpenUrl, "Contact Support", value: "https://www.google.com/") }
             };
