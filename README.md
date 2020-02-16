@@ -1,10 +1,12 @@
+<p align="center"><img src="img/red.png"></p>
+
 # LUISBankingBot
 
-This bot uses LUIS (Language understanding intelligence service). Check out this [Overview of the LUIS service]. Currently the Pre-built entities are also listed on the overview page. You might also need some [Cognitive Services Keys]. This app uses some prebuilt composite entities (like number and money) for ease of implementatoin, a composite entity is just a bunch o' entities mashed together.
+This bot uses LUIS (Language understanding intelligence service). Check out this [Overview of the LUIS service]. You might also need some [Cognitive Services Keys]. This app uses some prebuilt composite entities (like number and money) for ease of implementation, a composite entity is just a bunch o' entities mashed together.
 
 [Publish your Bot Application to Microsoft Azure] and show it to the world.
 
-You can also [test your bot in a webapp]. The app is contained within an iframe of a webpage. In the iframe, just include your app secret generated after properly configuring your bot endpoint in the tutorial when you [Publish your Bot Application to Microsoft Azure]. This webapp is just an instance of your bot, like how you can instances in Facebook Messenger, Slack, GroupMe etc.
+You can also [test your bot in a webapp]. The app is contained within an iframe of a webpage. In the iframe, just include your app secret generated after properly configuring your bot endpoint in the tutorial when you [Publish your Bot Application to Microsoft Azure]. This webapp is just an instance of your bot, the same way these instances appear in Facebook Messenger, Slack, GroupMe etc.
 
 If you wish to continue to test locally using the Microsoft Bot Channel Emulator, keep these [common error codes] in mind when running the bot locally in the emulator.
 
@@ -24,7 +26,5 @@ Test out the [bing speech to text and text to speech services] too if you want. 
 [Docs for bot with Bing speech api]: <https://docs.botframework.com/en-us/bot-intelligence/speech/#example-speech-to-text-bot>
 [Emojipedia]: <http://emojipedia.org/>
 [Overview of the LUIS service]: <https://www.luis.ai/Help>
-[Publish your Bot Application to Microsoft Azure]: <>ttps://docs.botframework.com/en-us/csharp/builder/sdkreference/gettingstarted.html#publishing
+[Publish your Bot Application to Microsoft Azure]: <https://docs.botframework.com/en-us/csharp/builder/sdkreference/gettingstarted.html#publishing>
 [test your bot in a webapp]: <https://docs.botframework.com/en-us/support/embed-chat-control2/>
-
-![alt tag](https://cdn2.scratch.mit.edu/get_image/user/13690549_90x90.png)
